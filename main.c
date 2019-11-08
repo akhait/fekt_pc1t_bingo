@@ -1,6 +1,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <time.h>
+typedef enum { False, True } bool;
 
 #define BOARD_SIZE 5
 #define BOARD_MAX_NUM 75
@@ -27,8 +28,40 @@ int (*fill_board(int board[BOARD_SIZE][BOARD_SIZE]))[BOARD_SIZE] {
     return board;
 }
 
+bool is_duplicit_number(int board[BOARD_SIZE][BOARD_SIZE], int number){
+    for (int i = 0; i < BOARD_SIZE; i++)
+        for (int j = 0; j < BOARD_SIZE; j++){
+            if (board[i][j] == number) {
+                return True;
+            }
+        }
+    return False;
+}
+
+int (*user_fill_board(int board[BOARD_SIZE][BOARD_SIZE]))[BOARD_SIZE] {
+    srand(time(0));
+    int number;
+    for (int i = 0; i < BOARD_SIZE; i++)
+        for (int j = 0; j < BOARD_SIZE; j++){
+            printf("Enter %d. number:\n", (5*i+j+1));
+            scanf("%d", &number);
+
+            while (is_duplicit_number(board, number)){
+                printf("Entered number:%d is already there:\n", number);
+                printf("Enter %d. number:\n", (5*i+j+1));
+                scanf("%d", &number);
+            }
+            board[i][j] = number;
+        }
+
+
+    return board;
+}
+
+
 int main(int argc, char** argv) {
     int board[BOARD_SIZE][BOARD_SIZE] = { 0 };
-    print_board(board);
+    int user_board[BOARD_SIZE][BOARD_SIZE] = { 0 };
+    print_board(user_fill_board(user_board));
     print_board(fill_board(board));
 }
