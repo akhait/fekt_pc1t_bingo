@@ -22,3 +22,4 @@ void print_board(Board *board);
 void fill_board(Board *board);
 bool board_has_number(Board *board, int number);
 void user_fill_board(Board *board);
+void debug_fill_board(Board *board);
