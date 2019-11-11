@@ -37,21 +37,15 @@ void print_board(Board *board) {
 // Fill board with random numbers from 1 to 75
 void fill_board(Board *board) {
     srand(time(0));
-    int avaiable_numbers[BOARD_MAX_NUM];
-    int random_index = (rand() % BOARD_MAX_NUM) + 1;
+    int random_number;
 
-    for (int n=0; n<BOARD_MAX_NUM; n++){
-        avaiable_numbers[n] = n+1;
-    }
-
-    while (avaiable_numbers[random_index] == 0){
-        random_index++;
-    }
-    //todo: check if the generated board isn't the same
     for (int i = 0; i < BOARD_SIZE; i++)
-        for (int j = 0; j < BOARD_SIZE; j++)
-            board->content[i][j]->value = avaiable_numbers[random_index];
-            avaiable_numbers[random_index] = 0;
+        for (int j = 0; j < BOARD_SIZE; j++) {
+            do {
+                random_number = (rand() % BOARD_MAX_NUM) + 1;
+            } while (board_has_number(board, random_number));  
+            board->content[i][j]->value = random_number;
+        }
 }
 // Returns true if number is present in a board
 bool board_has_number(Board *board, int number) {
