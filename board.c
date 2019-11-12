@@ -47,6 +47,14 @@ void fill_board(Board *board) {
             board->content[i][j]->value = random_number;
         }
 }
+
+
+void debug_fill_board(Board *board) {
+    for (int i = 0; i < BOARD_SIZE; i++)
+        for (int j = 0; j < BOARD_SIZE; j++)
+            board->content[i][j]->value = j + i*5 + 1;
+}
+
 // Returns true if number is present in a board
 bool board_has_number(Board *board, int number) {
     for (int i = 0; i < BOARD_SIZE; i++)
