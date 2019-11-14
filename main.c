@@ -31,6 +31,18 @@ int main() {
         //printf("\e[1;1H\e[2J");
     }
 
+    //testing winning conditions
+    Board board3;
+    init_board(&board3);
+    debug_fill_board(&board3);
+
+    board3.content[0][0]->status = STATUS_USED;
+    board3.content[0][1]->status = STATUS_USED;
+    board3.content[0][2]->status = STATUS_USED;
+    board3.content[0][3]->status = STATUS_USED;
+    board3.content[0][4]->status = STATUS_USED;
+
+    printf("result of check function: %d\n", has_won(&board3));
     //TODO: generate and match numbers with boards
     //TODO: optparse and reading numbers from file
 }
