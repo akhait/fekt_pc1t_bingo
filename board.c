@@ -88,3 +88,67 @@ void user_fill_board(Board *board) {
             board->content[i][j]->value = number;
         }
 }
+
+bool check_main_diagonal(Board *board){
+    bool is_drawed = True;
+    for (int i=0; i<BOARD_SIZE; i++){
+        if (board->content[i][i]->status == STATUS_EMPTY){
+            is_drawed = False;
+        }
+    }
+    return is_drawed;
+}
+
+bool check_secondary_diagonal(Board *board){
+    bool is_drawed = True;
+    for (int i=0; i<BOARD_SIZE; i++){
+        if (board->content[i][BOARD_SIZE-i-1]->status == STATUS_EMPTY){
+            is_drawed = False;
+        }
+    }
+    return is_drawed;
+}
+
+bool check_rows(Board *board){
+   bool is_drawed = True;
+   for (int row=0; row<BOARD_SIZE; row++){
+       for(int column=0; column < BOARD_SIZE; column++){
+           if (board->content[row][column]->status == STATUS_EMPTY){
+               is_drawed = False;
+           }
+       }
+       if (is_drawed){
+           return True;
+       }
+   }
+   return False;
+}
+
+bool check_columns(Board *board){
+    bool is_drawed = True;
+    for (int column=0; column < BOARD_SIZE; column++){
+        for(int row=0; row < BOARD_SIZE; row++){
+            if (board->content[column][row]->status == STATUS_EMPTY){
+                is_drawed = False;
+            }
+        }
+        if (is_drawed){
+            return True;
+        }
+    }
+    return False;
+}
+
+bool (*checking_functions[4]) (Board *board) = {check_main_diagonal, check_secondary_diagonal, check_rows, check_columns};
+
+bool has_won(Board *board){
+    bool temp;
+    for (int i=0; i<4; i++){
+        temp = (*checking_functions[i]) (board);
+        if (temp){
+            return True;
+        }
+    }
+    return False;
+}
+

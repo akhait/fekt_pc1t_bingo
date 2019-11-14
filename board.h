@@ -23,3 +23,5 @@ void fill_board(Board *board);
 bool board_has_number(Board *board, int number);
 void user_fill_board(Board *board);
 void debug_fill_board(Board *board);
+extern bool (*checking_functions[4]) (Board *board);
+bool has_won(Board *board);
