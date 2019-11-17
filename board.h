@@ -15,6 +15,7 @@ typedef struct cellT {
 
 typedef struct boardT {
     Cell *content[BOARD_SIZE][BOARD_SIZE];
+    char *name;
 } Board;
 
 void init_board(Board *board);
@@ -23,3 +24,4 @@ void fill_board(Board *board);
 bool board_has_number(Board *board, int number);
 void user_fill_board(Board *board);
 void debug_fill_board(Board *board);
+bool is_completed(Board *board);

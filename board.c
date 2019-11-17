@@ -88,3 +88,49 @@ void user_fill_board(Board *board) {
             board->content[i][j]->value = number;
         }
 }
+
+// Check if given board id completed
+// Check every row
+bool is_completed_row(Board * board, int row) {
+    for (int i = 0; i < BOARD_SIZE; i++)
+        if (!board->content[row][i]->status)
+            return False;
+
+    return True;
+}
+
+// Check every column
+bool is_completed_col(Board *board, int col) {
+    for (int i = 0; i < BOARD_SIZE; i++)
+        if (!board->content[i][col]->status)
+            return False;
+
+    return True;
+}
+
+// Check first diagonale
+bool is_completed_first_diag(Board *board) {
+    for (int i = 0; i < BOARD_SIZE; i++)
+        if (!board->content[i][i]->status)
+            return False;
+    return True;
+}
+
+// Check second diagonale
+bool is_completed_second_diag(Board *board) {
+    for (int i = 0, j = BOARD_SIZE-1; i < BOARD_SIZE || j >= 0; i++, j--)
+        if (!board->content[i][j]->status)
+            return False;
+    return True;
+}
+
+//Check if board is complete
+bool is_completed(Board *board) {
+    for (int i = 0; i < BOARD_SIZE; i++) {
+        if (is_completed_row(board, i))
+            return True;
+        if (is_completed_col(board, i))
+            return True;
+    }
+    return is_completed_first_diag(board) || is_completed_second_diag(board);
+}
