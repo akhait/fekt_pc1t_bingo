@@ -16,8 +16,8 @@ int generator_of_board_numbers(){
 }
 
 void change_status(Board *board, int generated_number){
-    for (int i = 0; i < BOARD_SIZE; i++)
-        for (int j = 0; j < BOARD_SIZE; j++) {
+    for (int i = 0; i < board->size; i++)
+        for (int j = 0; j < board->size; j++) {
             if (board->content[i][j]->value == generated_number) {
                 board->content[i][j]->status = STATUS_USED;
             }

@@ -16,12 +16,15 @@ typedef struct cellT {
 typedef struct boardT {
     Cell *content[BOARD_SIZE][BOARD_SIZE];
     char *name;
+    int size;
 } Board;
 
-void init_board(Board *board);
+void init_board(Board *board, char *board_name, int board_size);
 void print_board(Board *board);
 void fill_board(Board *board);
+int fill_from_file(Board *board, char *filename);
 bool board_has_number(Board *board, int number);
 void user_fill_board(Board *board);
 void debug_fill_board(Board *board);
 bool is_completed(Board *board);
+void cleanup(Board *board1, Board *board2);
