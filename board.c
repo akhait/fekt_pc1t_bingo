@@ -21,7 +21,7 @@ void init_board(Board *board, char *board_name, int board_size) {
 // Otherwise, the number wasn't used yet
 void print_board(Board *board) {
     if (board == NULL)
-        printf("<empty board>\n");
+        printw("<empty board>\n");
 
     const char *fmt_str;
     Cell *cell;
@@ -30,12 +30,12 @@ void print_board(Board *board) {
         for (int j = 0; j < board->size; j++) {
             cell = board->content[i][j];
             fmt_str = cell->status ? "!%02d " : " %02d ";
-            printf(fmt_str, cell->value);
+            printw(fmt_str, cell->value);
         }
-        printf("\n");
+        printw("\n");
     }
 
-    printf("\n");
+    printw("\n");
 }
 
 // Fill board with random numbers from 1 to 75
@@ -59,7 +59,7 @@ int fill_from_file(Board *board, char *filename) {
     int number, i = 0, j = 0;
     fp = fopen(filename, "r");
     if (fp == NULL) {
-        printf("Error: unable to open %s, check if this file exists and it's permissions\n", filename);
+        printw("Error: unable to open %s, check if this file exists and it's permissions\n", filename);
         return -1;
     }
 
@@ -67,14 +67,14 @@ int fill_from_file(Board *board, char *filename) {
         if (isspace(c)) {
             number = atoi(buff);
             if (number < 1 || number > 75) {
-                printf("Illegal number %d, please only use number from 1 to 75 separated by whitespaces\n", number);
+                printw("Illegal number %d, please only use number from 1 to 75 separated by whitespaces\n", number);
                 fclose(fp);
                 return -1;
             }
 
             if (j < board->size) {
                 if (board_has_number(board, number)) {
-                    printf("Numbers should be unique across one board. Number %d is duplicate\n", number);
+                    printw("Numbers should be unique across one board. Number %d is duplicate\n", number);
                     fclose(fp);
                     return -1;
                 }
@@ -85,12 +85,12 @@ int fill_from_file(Board *board, char *filename) {
                 j = 0;
                 i++;
                 if (i > board->size) {
-                    printf("Error: board overflow. Please use less numbers of bigger board size\n");
+                    printw("Error: board overflow. Please use less numbers of bigger board size\n");
                     fclose(fp);
                     return -1;
                 }
                 if (board_has_number(board, number)) {
-                    printf("Numbers should be unique across one board. Number %d is duplicate\n", number);
+                    printw("Numbers should be unique across one board. Number %d is duplicate\n", number);
                     fclose(fp);
                     return -1;
                 }
@@ -100,7 +100,7 @@ int fill_from_file(Board *board, char *filename) {
             j++;
         }
         else if (!isdigit(c)) {
-            printf("%c is not a numeric character, please use only numbers from 1 to 75 sperated by whitespaces\n", c);
+            printw("%c is not a numeric character, please use only numbers from 1 to 75 sperated by whitespaces\n", c);
             fclose(fp);
             return -1;
         }
@@ -110,7 +110,7 @@ int fill_from_file(Board *board, char *filename) {
             else if (buff[1] == '\n')
                 buff[1] = c;
             else {
-                printf("Number %s%c is wrong, please only use numbers from 1 to 75 separated by whitespaces\n",
+                printw("Number %s%c is wrong, please only use numbers from 1 to 75 separated by whitespaces\n",
                         buff, c);
                 fclose(fp);
                 return -1;
@@ -119,7 +119,7 @@ int fill_from_file(Board *board, char *filename) {
     }
 
     if (j < board->size || i < board->size - 1) {
-        printf("Error: reached EOF, but board isn't full yet . Please use more numbers of lesser board size\n");
+        printw("Error: reached EOF, but board isn't full yet . Please use more numbers of lesser board size\n");
         fclose(fp);
         return -1;
 
@@ -135,7 +135,7 @@ void debug_fill_board(Board *board) {
 }
 
 // Returns true if number is present in a board
-bool board_has_number(Board *board, int number) {
+bool_ board_has_number(Board *board, int number) {
     for (int i = 0; i < board->size; i++)
         for (int j = 0; j < board->size; j++) {
             if (board->content[i][j]->value == number) {
@@ -152,16 +152,16 @@ void user_fill_board(Board *board) {
     int number;
     for (int i = 0; i < board->size; i++)
         for (int j = 0; j < board->size; j++){
-            printf("Enter %d. number:\n", (5*i+j+1));
+            printw("Enter %d. number:\n", (5*i+j+1));
             scanf("%d", &number);
             while (number < 1 || number > 75) {
-                printf("Entered number:%d is not in 1-75 range:\n", number);
-                printf("Enter %d. number:\n", (5*i+j+1));
+                printw("Entered number:%d is not in 1-75 range:\n", number);
+                printw("Enter %d. number:\n", (5*i+j+1));
                 scanf("%d", &number);
             }
             while (board_has_number(board, number)){
-                printf("Entered number:%d is already there:\n", number);
-                printf("Enter %d. number:\n", (5*i+j+1));
+                printw("Entered number:%d is already there:\n", number);
+                printw("Enter %d. number:\n", (5*i+j+1));
                 scanf("%d", &number);
             }
             board->content[i][j]->value = number;
@@ -170,7 +170,7 @@ void user_fill_board(Board *board) {
 
 // Check if given board id completed
 // Check every row
-bool is_completed_row(Board * board, int row) {
+bool_ is_completed_row(Board * board, int row) {
     for (int i = 0; i < board->size; i++)
         if (!board->content[row][i]->status)
             return False;
@@ -179,7 +179,7 @@ bool is_completed_row(Board * board, int row) {
 }
 
 // Check every column
-bool is_completed_col(Board *board, int col) {
+bool_ is_completed_col(Board *board, int col) {
     for (int i = 0; i < board->size; i++)
         if (!board->content[i][col]->status)
             return False;
@@ -188,7 +188,7 @@ bool is_completed_col(Board *board, int col) {
 }
 
 // Check first diagonale
-bool is_completed_first_diag(Board *board) {
+bool_ is_completed_first_diag(Board *board) {
     for (int i = 0; i < board->size; i++)
         if (!board->content[i][i]->status)
             return False;
@@ -196,7 +196,7 @@ bool is_completed_first_diag(Board *board) {
 }
 
 // Check second diagonale
-bool is_completed_second_diag(Board *board) {
+bool_ is_completed_second_diag(Board *board) {
     for (int i = 0, j = board->size-1; i < board->size || j >= 0; i++, j--)
         if (!board->content[i][j]->status)
             return False;
@@ -204,7 +204,7 @@ bool is_completed_second_diag(Board *board) {
 }
 
 //Check if board is complete
-bool is_completed(Board *board) {
+bool_ is_completed(Board *board) {
     for (int i = 0; i < board->size; i++) {
         if (is_completed_row(board, i))
             return True;

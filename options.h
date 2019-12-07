@@ -4,7 +4,7 @@ typedef struct optionsT {
     char *board2_name;
     char *numbers_filename1;
     char *numbers_filename2;
-    bool user_mode;
+    bool_ user_mode;
 
 } Options;
 
