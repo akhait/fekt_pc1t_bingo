@@ -26,11 +26,16 @@ void print_board(Board *board) {
     const char *fmt_str;
     Cell *cell;
 
+    init_pair(1, COLOR_GREEN, COLOR_BLACK);
     for (int i = 0; i < board->size; i++) {
         for (int j = 0; j < board->size; j++) {
             cell = board->content[i][j];
-            fmt_str = cell->status ? "!%02d " : " %02d ";
-            printw(fmt_str, cell->value);
+            fmt_str = " %02d ";
+            if(cell->status){
+                attron(COLOR_PAIR(1));
+                printw(fmt_str, cell->value);
+                attroff(COLOR_PAIR(1));
+            }else printw(fmt_str, cell->value);
         }
         printw("\n");
     }
@@ -145,27 +150,134 @@ bool_ board_has_number(Board *board, int number) {
     return False;
 }
 
+void highlighted_print_board(Board *board, int y, int x, bool_ game_hint) {
+    clear();
+    if (board == NULL)
+        printw("<empty board>\n");
+
+    const char *fmt_str;
+    Cell *cell;
+
+    init_pair(2, COLOR_YELLOW, COLOR_BLACK);
+    for (int i = 0; i < board->size; i++) {
+        for (int j = 0; j < board->size; j++) {
+            cell = board->content[i][j];
+            fmt_str = " %02d ";
+            if(i==y && j==x){
+                attron(COLOR_PAIR(2));
+                printw(fmt_str, cell->value);
+                attroff(COLOR_PAIR(2));
+            }else printw(fmt_str, cell->value);
+        }
+        printw("\n");
+    }
+
+    printw("\n");
+
+    if(game_hint){
+        move(40, 0);
+        printw("i: insert number\n");
+        printw("s: save board");
+    }
+    curs_set(0);
+    refresh();
+}
+bool_ board_number_out_of_range(int number){
+    if(number < 1 || number > 75){
+        return True;
+    }
+    return False;
+}
+void getting_number(Board *board, int y, int x ){
+    int number;
+    bool_ has_number;
+    bool_ out_of_range;
+    highlighted_print_board(board, y, x, False);
+
+    printw("Enter number: ");
+    curs_set(1);
+    refresh();
+    echo();
+    scanw("%d", &number);
+    while((board_has_number(board, number)) || (board_number_out_of_range(number))){
+        highlighted_print_board(board, y, x, False);
+
+        if(board_has_number(board, number)) {
+            printw("This number is already set.\n");
+        }
+        else{
+            printw("Number is not in range <1-75>.\n");
+        }
+        printw("Enter number: ");
+        curs_set(1);
+        refresh();
+        scanw("%d", &number);
+    }
+    noecho();
+    board->content[y][x]->value = number;
+}
+
+bool_ is_filled(Board *board){
+    Cell *cell;
+    for (int i = 0; i < board->size; i++) {
+        for (int j = 0; j < board->size; j++) {
+            cell = board->content[i][j];
+            if(cell->value == 0){
+                return False;
+            }
+        }
+    }
+    return True;
+}
 // Fill board with numbers from 1 to 75
 // Numbers are read from standart input and checked
 void user_fill_board(Board *board) {
-    srand(time(0));
     int number;
-    for (int i = 0; i < board->size; i++)
-        for (int j = 0; j < board->size; j++){
-            printw("Enter %d. number:\n", (5*i+j+1));
-            scanf("%d", &number);
-            while (number < 1 || number > 75) {
-                printw("Entered number:%d is not in 1-75 range:\n", number);
-                printw("Enter %d. number:\n", (5*i+j+1));
-                scanf("%d", &number);
-            }
-            while (board_has_number(board, number)){
-                printw("Entered number:%d is already there:\n", number);
-                printw("Enter %d. number:\n", (5*i+j+1));
-                scanf("%d", &number);
-            }
-            board->content[i][j]->value = number;
+    int ch;
+    int y = 0;
+    int x = 0;
+    int border = board->size - 1;
+    char temp[8];
+    //nodelay(stdscr, TRUE);
+
+    highlighted_print_board(board, y, x, True);
+
+    for (;;) {
+        ch = getch();
+        switch (ch) {
+            case KEY_BACKSPACE: /* user pressed backspace */
+                break;
+            case KEY_UP:  /* user pressed up arrow key */
+                if(y == 0) {y = board->size -1;}
+                else{y--;}
+                highlighted_print_board(board, y, x, True);
+                break;
+            case KEY_DOWN:  /* user pressed up arrow key */
+                y = (y+1)% board->size;
+                highlighted_print_board(board, y, x, True);
+                break;
+            case KEY_RIGHT:   /* user pressed key 'A' */
+                x = (x+1) % board->size;
+                highlighted_print_board(board, y, x, True);
+                break;
+            case KEY_LEFT:
+                if(x == 0){x = board->size - 1;}
+                else{x = (x-1) % board->size;}
+                highlighted_print_board(board, y, x, True);
+                break;
+            case 'i':
+                getting_number(board , y, x);
+                highlighted_print_board(board, y, x, True);
+                break;
+            case 's':
+                if(!is_filled(board)) {
+                    highlighted_print_board(board, y, x, True);
+                    printw("\nBoard is not yet filled.\n");
+                }
+                else{return;}
         }
+
+    }
 }
 
 // Check if given board id completed
