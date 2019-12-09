@@ -1,7 +1,7 @@
 CC=gcc
-CFLAGS=-Wall -std=c99
+CFLAGS=-lncurses -std=c99
 
-DEPS = board.c generator.c options.c main.c
+DEPS = *.h *.c
 
 bingo: $(DEPS) 
 	$(CC) $(CFLAGS) $(DEPS) -o bingo

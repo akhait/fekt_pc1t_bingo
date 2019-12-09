@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <ncurses.h>
 
+#define MAX_BOARD_SIZE 8
 #define BOARD_SIZE 5
 #define BOARD_MAX_NUM 75
 #define BOARD_DELAY 1
@@ -15,7 +16,7 @@ typedef struct cellT {
 } Cell;
 
 typedef struct boardT {
-    Cell *content[BOARD_SIZE][BOARD_SIZE];
+    Cell *content[MAX_BOARD_SIZE][MAX_BOARD_SIZE];
     char *name;
     int size;
 } Board;

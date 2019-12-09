@@ -1,3 +1,5 @@
+#include "board.h"
+
 typedef struct optionsT {
     int board_size;
     char *board1_name;

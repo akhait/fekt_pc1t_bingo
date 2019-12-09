@@ -13,7 +13,8 @@ void init_board(Board *board, char *board_name, int board_size) {
             board->content[i][j] = (Cell*) malloc(sizeof(Cell));
             board->content[i][j]->value = 0;
             board->content[i][j]->status = STATUS_EMPTY;
-        }
+
+    }
 }
 
 // Print a board
