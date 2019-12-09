@@ -89,7 +89,7 @@ int fill_from_file(Board *board, char *filename) {
             else {
                 j = 0;
                 i++;
-                if (i > board->size) {
+                if (i >= board->size) {
                     printw("Error: board overflow. Please use less numbers of bigger board size\n");
                     fclose(fp);
                     return -1;
@@ -182,15 +182,17 @@ void highlighted_print_board(Board *board, int y, int x, bool_ game_hint) {
     curs_set(0);
     refresh();
 }
+
 bool_ board_number_out_of_range(int number){
     if(number < 1 || number > 75){
         return True;
     }
     return False;
 }
+
 void getting_number(Board *board, int y, int x ){
-    int number;
     highlighted_print_board(board, y, x, False);
+    int number;
     bool_ number_ok = False;
     do {
         printw("Enter number: ");
@@ -198,7 +200,6 @@ void getting_number(Board *board, int y, int x ){
         refresh();
         echo();
         scanw("%d", &number);
-        printw("Got number %d\n", number);
 
         if(board_has_number(board, number)) {
             printw("This number is already set.\n");
@@ -261,7 +262,7 @@ void user_fill_board(Board *board) {
                 break;
             case 'i':
                 getting_number(board , y, x);
-                if (x < BOARD_SIZE)
+                if (x < board->size - 1)
                     x++;
                 else {
                     x = 0;

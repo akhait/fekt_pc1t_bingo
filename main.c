@@ -32,10 +32,10 @@ int main(int argc, char **argv) {
             return ret;
         }
     }
-    else
-        //debug_fill_board(&board1);
+    else {
         user_fill_board(&board1);
         clear();
+    }
 
     if (options.user_mode) {
         if (options.numbers_filename2 != NULL) {
@@ -46,10 +46,10 @@ int main(int argc, char **argv) {
                 return ret;
             }
         }
-        else
-            debug_fill_board(&board2);
-            // user_fill_board(&board2)
+        else {
+            user_fill_board(&board2);
             clear();
+        }
     }
     else
         fill_board(&board2);
@@ -75,15 +75,13 @@ int main(int argc, char **argv) {
         refresh();
         sleep(BOARD_DELAY);
         clear();
-        //printw("\e[1;1H\e[2J");
-
 
         if (is_completed(&board1)) {
             printw("\n\n");
             change_status(&board1, number);
             print_board(&board1);
             printw("%s is a winner!\n", board1.name);
-            //refresh();
+            refresh();
             cleanup(&board1, &board2);
             break;
         }
@@ -92,7 +90,7 @@ int main(int argc, char **argv) {
             change_status(&board2, number);
             print_board(&board2);
             printw("%s is a winner!\n", board2.name);
-            //refresh();
+            refresh();
             cleanup(&board1, &board2);
             break;
         }
@@ -100,7 +98,4 @@ int main(int argc, char **argv) {
     }
     getch();
     endwin();
-    //TODO: help
-    //TODO: tests,
-    //TODO: option to choose between player vs player
 }
