@@ -190,29 +190,28 @@ bool_ board_number_out_of_range(int number){
 }
 void getting_number(Board *board, int y, int x ){
     int number;
-    bool_ has_number;
-    bool_ out_of_range;
     highlighted_print_board(board, y, x, False);
-
-    printw("Enter number: ");
-    curs_set(1);
-    refresh();
-    echo();
-    scanw("%d", &number);
-    while((board_has_number(board, number)) || (board_number_out_of_range(number))){
-        highlighted_print_board(board, y, x, False);
-
-        if(board_has_number(board, number)) {
-            printw("This number is already set.\n");
-        }
-        else{
-            printw("Number is not in range <1-75>.\n");
-        }
+    bool_ number_ok = False;
+    do {
         printw("Enter number: ");
         curs_set(1);
         refresh();
+        echo();
         scanw("%d", &number);
-    }
+        printw("Got number %d\n", number);
+
+        if(board_has_number(board, number)) {
+            printw("This number is already set.\n");
+            continue;
+        }
+        else if (board_number_out_of_range(number)) {
+            printw("Number is not in range <1-75>.\n");
+            continue;
+        } else
+        {
+            number_ok = True;
+        }
+    } while(!number_ok);
     noecho();
     board->content[y][x]->value = number;
 }
@@ -232,13 +231,9 @@ bool_ is_filled(Board *board){
 // Fill board with numbers from 1 to 75
 // Numbers are read from standart input and checked
 void user_fill_board(Board *board) {
-    int number;
     int ch;
     int y = 0;
     int x = 0;
-    int border = board->size - 1;
-    char temp[8];
-    //nodelay(stdscr, TRUE);
 
     highlighted_print_board(board, y, x, True);
 
@@ -267,6 +262,12 @@ void user_fill_board(Board *board) {
                 break;
             case 'i':
                 getting_number(board , y, x);
+                if (x < BOARD_SIZE)
+                    x++;
+                else {
+                    x = 0;
+                    y++;
+                }
                 highlighted_print_board(board, y, x, True);
                 break;
             case 's':

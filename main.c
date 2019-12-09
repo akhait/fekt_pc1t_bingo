@@ -83,7 +83,7 @@ int main(int argc, char **argv) {
             change_status(&board1, number);
             print_board(&board1);
             printw("%s is a winner!\n", board1.name);
-            refresh();
+            //refresh();
             cleanup(&board1, &board2);
             break;
         }
@@ -92,7 +92,7 @@ int main(int argc, char **argv) {
             change_status(&board2, number);
             print_board(&board2);
             printw("%s is a winner!\n", board2.name);
-            refresh();
+            //refresh();
             cleanup(&board1, &board2);
             break;
         }
