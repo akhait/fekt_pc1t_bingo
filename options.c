@@ -12,8 +12,18 @@ int optparse(int argc, char *argv[], Options *options) {
     options->user_mode = False;
 
     int option;
-    while((option = getopt(argc, argv, ":s:f:F:n:N:u")) != -1) {
+    while((option = getopt(argc, argv, ":s:f:F:n:N:uh")) != -1) {
         switch(option){
+            case 'h':
+                printf("%s [OPTIONS] ...\n", argv[0]);
+                printf("Options:\n");
+                printf("-u           user vs user mode\n");
+                printf("-s SIZE      use board of size SIZE\n");
+                printf("-n NAME      first board name\n");
+                printf("-N NAME      second board name\n");
+                printf("-f FILENAME  fill first board with numbers from file FILENAME\n");
+                printf("-F FILENAME  fill second board with numbers from file FILENAME\n");
+                exit(0);
             case 'u':
                 options->user_mode = True;
                 break;

@@ -3,7 +3,7 @@
 
 #define BOARD_SIZE 5
 #define BOARD_MAX_NUM 75
-#define BOARD_DELAY 3
+#define BOARD_DELAY 1
 
 typedef enum status_t {STATUS_EMPTY, STATUS_USED} Status;
 typedef enum bool_t { False, True } bool;

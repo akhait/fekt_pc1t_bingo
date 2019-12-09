@@ -25,8 +25,8 @@ int main(int argc, char **argv) {
         }
     }
     else
-        debug_fill_board(&board1);
-        // user_fill_board(&board1);
+        // debug_fill_board(&board1);
+        user_fill_board(&board1);
 
     if (options.user_mode) {
         if (options.numbers_filename2 != NULL) {
@@ -37,8 +37,8 @@ int main(int argc, char **argv) {
             }
         }
         else
-            debug_fill_board(&board2);
-            // user_fill_board(&board2)
+            // debug_fill_board(&board2);
+            user_fill_board(&board2);
     }
     else
         fill_board(&board2);
@@ -80,7 +80,4 @@ int main(int argc, char **argv) {
 
     }
 
-
-    //TODO: help
-    //TODO: tests, better UI
 }
