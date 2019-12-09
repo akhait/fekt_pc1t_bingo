@@ -207,10 +207,9 @@ void getting_number(Board *board, int y, int x ){
         else if (board_number_out_of_range(number)) {
             printw("Number is not in range <1-75>.\n");
             continue;
-        } else
-        {
-            number_ok = True;
         }
+        else
+            number_ok = True;
     } while(!number_ok);
     noecho();
     board->content[y][x]->value = number;
